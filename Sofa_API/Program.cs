@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Microsoft.AspNetCore.Server.Kestrel.Https;
 using Sofa_API.Middleware;
+using Sofa_API.StatHandlers;
 
 var builder = WebApplication.CreateBuilder(args);
 

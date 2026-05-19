@@ -1,7 +1,7 @@
 using System.Net;
 using System.Net.Sockets;
 
-namespace Sofa_API;
+namespace Sofa_API.StatHandlers;
 
 /// <summary>
 /// Contains methods and classes for storing and fetching general system info, along with CPU and RAM stats.

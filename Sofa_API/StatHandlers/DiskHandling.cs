@@ -1,6 +1,6 @@
 using System.Text.RegularExpressions;
 
-namespace Sofa_API;
+namespace Sofa_API.StatHandlers;
 /// <summary>
 /// Contains all the methods and classes to fetch stats about anything disk or filesystem related.
 /// </summary>

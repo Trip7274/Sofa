@@ -379,7 +379,7 @@ public static class ApiConfig
 			foreach (var mountPointToAdd in mountPoints.Where(mountPointToAdd => !WatchedMounts.ContainsKey(mountPointToAdd.Key)))
 			{
 				WatchedMounts.Add(mountPointToAdd.Key, mountPointToAdd.Value ?? "Mount");
-				DiskHandling.FullDisksData.AddMount(mountPointToAdd.Key, mountPointToAdd.Value ?? "Mount");
+				StatHandlers.DiskHandling.FullDisksData.AddMount(mountPointToAdd.Key, mountPointToAdd.Value ?? "Mount");
 				configChanged = true;
 			}
 
@@ -400,7 +400,7 @@ public static class ApiConfig
 			foreach (var mountPoint in mountPoints)
 			{
 				WatchedMounts.Remove(mountPoint);
-				DiskHandling.FullDisksData.RemoveMount(mountPoint);
+				StatHandlers.DiskHandling.FullDisksData.RemoveMount(mountPoint);
 			}
 
 			SaveConfig();

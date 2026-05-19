@@ -1,6 +1,6 @@
 using System.Text.Json;
 
-namespace Sofa_API;
+namespace Sofa_API.StatHandlers;
 
 public static class GpuHandling
 {
