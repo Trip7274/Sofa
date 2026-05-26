@@ -5,7 +5,7 @@ using MessagePack;
 
 namespace Sofa_API.Security;
 
-public static class Hashing
+public static class PasswordHashing
 {
 	public const byte HashLength = 32; // 256 bits
 	public const byte SaltLength = 32; // 256 bits

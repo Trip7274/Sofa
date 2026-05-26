@@ -150,11 +150,11 @@ public sealed partial class User : HasPermissions
 {
 	[SerializationConstructor]
 	private User (string name, string? profilePictureUrl, Guid guid, byte[] password, byte[] salt,
-		Hashing.PasswordAttributes attributes, Dictionary<string, List<string>> permissionList, bool isPaused)
-		: base(name, guid, permissionList, isPaused)
+		PasswordHashing.PasswordAttributes attributes, Dictionary<string, List<string>> permissionList, bool isPaused, DecorationalProperties decorationalProps)
+		: base(name, guid, permissionList, isPaused, decorationalProps)
 	{
-		if (password.Length != Hashing.HashLength) throw new ArgumentException("Password is invalid.", nameof(password));
-		if (salt.Length != Hashing.SaltLength) throw new ArgumentException("Salt is invalid", nameof(salt));
+		if (password.Length != PasswordHashing.HashLength) throw new ArgumentException("Password is invalid.", nameof(password));
+		if (salt.Length != PasswordHashing.SaltLength) throw new ArgumentException("Salt is invalid", nameof(salt));
 
 		// Checks done
 
@@ -179,7 +179,7 @@ public sealed partial class User : HasPermissions
 		password = ParsingMethods.SanitizeString(password);
 
 		ProfilePictureUrl = profilePictureUrl;
-		var hashedPassword = Hashing.HashPassword(password, Guid, out var salt, out var attributes);
+		var hashedPassword = PasswordHashing.HashPassword(password, Guid, out var salt, out var attributes);
 		Password = hashedPassword;
 		Salt = salt;
 		Attributes = attributes;
@@ -194,7 +194,7 @@ public sealed partial class User : HasPermissions
 	/// </summary>
 	public byte[] Password { get; private set; }
 	public byte[] Salt { get; private set; }
-	public Hashing.PasswordAttributes Attributes { get; private set; }
+	public PasswordHashing.PasswordAttributes Attributes { get; private set; }
 	public override bool IsActive => true;
 
 
@@ -232,7 +232,7 @@ public sealed partial class User : HasPermissions
 					if (string.IsNullOrWhiteSpace(value))
 						continue;
 
-					var hashedPassword = Hashing.HashPassword(value, Guid, out var salt, out var attributes);
+					var hashedPassword = PasswordHashing.HashPassword(value, Guid, out var salt, out var attributes);
 					Password = hashedPassword;
 					Salt = salt;
 					Attributes = attributes;
@@ -778,7 +778,7 @@ public static class Users
 		presentedPassword = ParsingMethods.SanitizeString(presentedPassword);
 
 		if (TryFetchUser(username, out var foundUser) && !foundUser.IsPaused &&
-		    foundUser.Password.SequenceEqual(Hashing.HashPassword(presentedPassword, foundUser.Guid, foundUser.Salt, foundUser.Attributes)))
+		    foundUser.Password.SequenceEqual(PasswordHashing.HashPassword(presentedPassword, foundUser.Guid, foundUser.Salt, foundUser.Attributes)))
 		{
 			user = foundUser;
 			return true;
