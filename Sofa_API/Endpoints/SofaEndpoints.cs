@@ -110,8 +110,20 @@ public static class SofaEndpoints
 			.WithDescription("`verbosity` is optional and specifies the level of log verbosity to follow. Defaults to Sofa's configured `LogVerbosity` setting. " +
 			                 "`initialContext` is optional and referres to how many lines of past logs to include at the start of the stream. Defaults to 50 [Range: 0-100]. " +
 			                 "`format` can be set to either 'json' or 'binary', meaning either JSON entries for each log, or a Base64 encoded string of the serialized log entry.")
-			.WithTags("Logs")
+			.WithTags("Sofa", "Logs")
 			.WithName("GetSofaLogsSse")
 			.RequireAuthorization("MultiAuth", "logs:view");
+
+		app.MapGet("/about", () => Results.Json(new
+		{
+			InstanceName = ApiConfig.ApiConfiguration.BackendName,
+			InstanceId = ApiConfig.InstanceId,
+			Version = ApiConfig.Version,
+			BasePath = ApiConfig.BaseApiUrlPath,
+			ClientRequestLifetime = ApiConfig.ApiConfiguration.ClientRequestLifetime
+		})).Produces(StatusCodes.Status200OK)
+		.WithSummary("Returns information about the Sofa instance. Useful for first contact.")
+		.WithTags("Sofa", "About")
+		.WithName("SofaAbout");
 	}
 }

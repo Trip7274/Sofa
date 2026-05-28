@@ -37,6 +37,46 @@ public static class ApiConfig
 	public static readonly ushort HttpsNetworkPort = (ushort) (ushort.TryParse(Environment.GetEnvironmentVariable("SOFA_HTTPS_NETWORK_PORT"), out var port) ? port : 5988);
 
 	/// <summary>
+	/// This Sofa instance's unique ID. Represented as a GUIDv7.
+	/// </summary>
+	/// <remarks>
+	///	This is generated once, and stored in a file in the certificates folder. If the file is missing, a new one is generated.
+	/// </remarks>
+	public static Guid InstanceId
+	{
+		get
+		{
+			var idFilePath = Path.Combine(SofaPaths.SubPaths.PathToCertificatesFolder, "instanceId");
+			if (field == Guid.Empty)
+			{
+				if (!File.Exists(idFilePath))
+				{
+					field = GenerateNewId();
+				}
+				else
+				{
+					field = Guid.TryParse(File.ReadAllBytes(idFilePath), out var parsedId)
+						? parsedId
+						: GenerateNewId();
+				}
+			}
+
+			return field;
+
+			// A local helper function inside a getter feels cursed :(
+			// This just creates a new GUIDv7, and writes that to the file at idFilePath
+			Guid GenerateNewId()
+			{
+				Logs.LogBook.Write(new(LogStream.Verbose, "Instance ID",
+					"Couldn't find the instance ID file. Generating a new one."));
+				var id = Guid.CreateVersion7();
+				File.WriteAllBytes(idFilePath, id.ToByteArray());
+				return id;
+			}
+		}
+	} = Guid.Empty;
+
+	/// <summary>
 	/// A stopwatch used to track how long Sofa has been running for. Started on API startup
 	/// </summary>
 	public static readonly Stopwatch SofaStartStopwatch = Stopwatch.StartNew();
