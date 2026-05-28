@@ -150,8 +150,8 @@ public sealed partial class User : HasPermissions
 {
 	[SerializationConstructor]
 	private User (string name, string? profilePictureUrl, Guid guid, byte[] password, byte[] salt,
-		PasswordHashing.PasswordAttributes attributes, Dictionary<string, List<string>> permissionList, bool isPaused, DecorationalProperties decorationalProps)
-		: base(name, guid, permissionList, isPaused, decorationalProps)
+		PasswordHashing.PasswordAttributes attributes, Dictionary<string, List<string>> permissionList, bool isPaused)
+		: base(name, guid, permissionList, isPaused)
 	{
 		if (password.Length != PasswordHashing.HashLength) throw new ArgumentException("Password is invalid.", nameof(password));
 		if (salt.Length != PasswordHashing.SaltLength) throw new ArgumentException("Salt is invalid", nameof(salt));
